@@ -34,6 +34,13 @@
   "dependencies": {
     "crc": "^3.5.0",
     "crc16-ccitt-node": "^1.0.4",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jwt-simple": "^0.5.1",
+    "moment": "^2.20.1",
+    "mongoose": "^4.13.9",
+    "socket.io": "^2.0.4",
     "node.extend": "*"
   },
   "deprecated": false,
