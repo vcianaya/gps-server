@@ -1,4 +1,4 @@
-var gps = require("gps-tracking");
+var gps = require("./../gps-tracking");
 
 var options = {
     'debug'                 : true,
@@ -23,9 +23,12 @@ var server = gps.server(options,function(device,connection){
     device.on("ping",function(data){
 
         //After the ping is received, but before the data is saved
-        //console.log(data);
+        console.log(data);
         return data;
 
     });
-
+    connection.on('error', function (data) {
+        console.log("Connection Error Victor: ");
+        console.log(data);
+    });
 });

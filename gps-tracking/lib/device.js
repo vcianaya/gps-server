@@ -119,6 +119,7 @@ function Device(adapter, connection, gpsServer) {
 
     _this.do_log('Position received ( ' + gpsData.latitude + ',' + gpsData.longitude + ' )');
     gpsData.from_cmd = msgParts.cmd;
+    gpsData.imei = _this.getUID();
     _this.emit('ping', gpsData, msgParts);
 
   };

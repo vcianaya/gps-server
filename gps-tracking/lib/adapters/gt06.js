@@ -1,6 +1,6 @@
 /* Original code: https://github.com/cnberg/gps-tracking-nodejs/blob/master/lib/adapters/gt06.js */
 f = require('../functions');
-
+crc = require('crc');
 exports.protocol = 'GT06';
 exports.model_name = 'GT06';
 exports.compatible_hardware = ['GT06/supplier'];
@@ -22,7 +22,7 @@ var adapter = function (device) {
    return type: login_request, ping, etc.
    *******************************************/
   this.parse_data = function (data) {
-    data = f.bufferToHexString(data);
+    data = data.toString('hex');
     var parts = {
       'start': data.substr(0, 4)
     };
@@ -78,7 +78,6 @@ var adapter = function (device) {
 
     this.__count++;
 
-    var crc = require('/usr/lib/node_modules/crc/lib/index.js');
     var crcResult = f.str_pad(crc.crc16(str).toString(16), 4, '0');
 
     var buff = new Buffer('7878' + str + crcResult + '0d0a', 'hex');
@@ -140,6 +139,7 @@ var adapter = function (device) {
     var str = msg_parts.data;
 
     var data = {
+      "device_info": f.str_pad(parseInt(str.substr(54,2)).toString(2), 8, 0),      
       'date': str.substr(0, 12),
       'set_count': str.substr(12, 2),
       'latitude_raw': str.substr(14, 8),
@@ -149,8 +149,11 @@ var adapter = function (device) {
       'speed': parseInt(str.substr(30, 2), 16),
       'orientation': str.substr(32, 4),
       'lbs': str.substr(36, 16),
+      "gsm": str.substr(58,2),
     };
-
+    data['gps_status'] = data['device_info'][1];
+    data['charge_status'] = data['device_info'][5];
+    data['acc_status']= data['device_info'][6];
     /*
      "device_info"	: f.str_pad(parseInt(str.substr(54,2)).toString(2), 8, 0),
      "power"	        : str.substr(56,2),
@@ -163,9 +166,10 @@ var adapter = function (device) {
      data['defence_status'] = data['device_info'][7];
      */
 
-    console.log(data);
+    //console.log(data);
 
     res = {
+      date: data.date,
       latitude: data.latitude,
       longitude: data.longitude,
       speed: data.speed,
