@@ -19,7 +19,7 @@ var server = gps.server(options,function(device,connection){
 
     //PING -> When the gps sends their position  
     device.on("ping",function(data){
-        app.emmit_socket({latitude:data.latitude, longitude:data.longitude});
+        app.emmit_socket({data});
         console.log(data);
         return data;
 
